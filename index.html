@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Palsang Weds Januka ❤️</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #10070d;
+    color: white;
+    font-family: Georgia, serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+.screen {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 100vh;
+    min-height: 100svh;
+    width: 100%;
+    padding: 20px;
+    background: radial-gradient(circle at 50% 15%, #451324, #10070d 70%);
+}
+
+.screen.active {
+    display: flex;
+}
+
+.card {
+    width: min(680px, 100%);
+    padding: clamp(22px, 5vw, 45px);
+    border: 1px solid #ff668477;
+    border-radius: 26px;
+    background: #1b0b15ed;
+    box-shadow: 0 20px 70px #0009, 0 0 35px #ff315822;
+}
+
+.kicker {
+    font: 12px Arial, sans-serif;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    color: #ff9caf;
+}
+
+h1 {
+    font-size: clamp(2.5rem, 9vw, 5rem);
+    line-height: 1.1;
+    margin: 18px 0;
+    text-shadow: 0 0 25px #ff315866;
+}
+
+h2 {
+    font-size: clamp(1.8rem, 6vw, 3rem);
+    margin: 15px 0;
+}
+
+p {
+    color: #f3d6df;
+    line-height: 1.8;
+    margin: 12px 0;
+}
+
+.gold {
+    color: #f7d58a;
+}
+
+.btn {
+    border: 0;
+    border-radius: 50px;
+    padding: 14px 26px;
+    margin: 8px;
+    background: linear-gradient(135deg, #ff6c89, #d71949);
+    color: white;
+    font-weight: bold;
+    font-size: 15px;
+    cursor: pointer;
+    transition: .3s;
+    box-shadow: 0 8px 25px #ff315844;
+}
+
+.btn:hover {
+    transform: translateY(-3px);
+    filter: brightness(1.15);
+}
+
+.music-btn {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    z-index: 100;
+    border: 1px solid #ff9caf88;
+    border-radius: 30px;
+    background: #250d1a;
+    color: white;
+    padding: 11px 16px;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+#play {
+    width: min(560px, 100%);
+}
+
+#board {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 4;
+    border-radius: 20px;
+    border: 1px solid #ff819c88;
+    background: linear-gradient(#160e2d, #54172e 75%, #170a13);
+    touch-action: manipulation;
+}
+
+.hud {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    font: 14px Arial, sans-serif;
+    margin-bottom: 12px;
+    color: #ffdce5;
+}
+
+.small {
+    font: 12px Arial, sans-serif;
+    color: #d9b9c4;
+    margin-top: 12px;
+}
+
+.photo {
+    display: block;
+    width: min(100%, 500px);
+    max-height: 52vh;
+    object-fit: cover;
+    border-radius: 20px;
+    border: 2px solid #f7d58a;
+    margin: 18px auto;
+    box-shadow: 0 10px 35px #0009;
+}
+
+.poem {
+    white-space: pre-line;
+    line-height: 1.9;
+    font-size: clamp(1rem, 2.8vw, 1.2rem);
+    color: #ffe9ef;
+    margin: 20px auto;
+}
+
+.ring {
+    font-size: clamp(55px, 12vw, 85px);
+    animation: ring 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes ring {
+    to {
+        transform: translateY(-12px) rotate(8deg);
+        filter: drop-shadow(0 0 18px gold);
+    }
+}
+
+.float {
+    position: fixed;
+    pointer-events: none;
+    animation: rise 5s linear forwards;
+    z-index: 200;
+}
+
+@keyframes rise {
+    from {
+        transform: translateY(0) scale(.7);
+        opacity: 0;
+    }
+    15% {
+        opacity: 1;
+    }
+    to {
+        transform: translateY(-110vh) scale(1.5);
+        opacity: 0;
+    }
+}
+
+#choices {
+    position: relative;
+    height: 80px;
+    margin-top: 15px;
+}
+
+#no {
+    position: absolute;
+    left: 55%;
+    top: 0;
+    background: #555;
+}
+
+@media(max-width: 600px) {
+    .screen {
+        padding: 12px;
+    }
+
+    .card {
+        padding: 22px 15px;
+        border-radius: 20px;
+    }
+
+    .hud {
+        font-size: 12px;
+    }
+
+    .btn {
+        padding: 13px 20px;
+        font-size: 13px;
+    }
+
+    .photo {
+        max-height: 45vh;
+    }
+}
+
+@media(max-height: 650px) {
+    .screen {
+        padding-top: 65px;
+        padding-bottom: 20px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ROMANTIC BACKGROUND MUSIC -->
+<audio id="romanticMusic" src="SURPRISE/Promise of Tomorrow.mp3" loop preload="auto"></audio>
+
+<button class="music-btn" id="musicButton" onclick="toggleMusic()">
+🎵 Music OFF
+</button>
+
+<!-- INTRO SCREEN -->
+<section class="screen active" id="intro">
+
+<div class="card">
+
+<div class="kicker">A little journey made with love</div>
+
+<h1>
+Fly Into<br>
+<span class="gold">My Heart</span> 🕊️
+</h1>
+
+<div class="gold" style="font-size:1.4rem;">
+PALSANG WEDS JANUKA
+</div>
+
+<p>
+Every heart brings you closer to a beautiful surprise.
+Are you ready, Dalli? ❤️
+</p>
+
+<button class="btn" onclick="startGame()">
+START OUR STORY ♥
+</button>
+
+<p class="small">
+Tap / Click / Press SPACE to fly
+</p>
+
+</div>
+</section>
+
+<!-- GAME SCREEN -->
+<section class="screen" id="game">
+
+<div id="play">
+
+<div class="hud">
+<span>❤️ Hearts: <b id="score">0</b> / 10</span>
+<span>🕊️ Keep Flying!</span>
+</div>
+
+<canvas id="board" width="480" height="640"></canvas>
+
+<p class="small">
+Tap, click or press SPACE to fly.
+Collect 10 hearts to unlock your surprise!
+</p>
+
+</div>
+</section>
+
+<!-- PROPOSAL SCREEN -->
+<section class="screen" id="proposal">
+
+<div class="card">
+
+<div class="kicker">A question from my heart</div>
+
+<div class="ring">💍</div>
+
+<h2>Dalli, मेरो माया…</h2>
+
+<div class="poem">
+
+तिमीलाई भेटेपछि जीवनको अर्थ बुझ्न थालेँ,
+तिम्रो मुस्कानभित्र आफ्नै संसार देख्न थालेँ।
+न चाहिन्छ महल, न चाहिन्छ संसारको धन,
+बस तिम्रो हात समाएर बितोस् मेरो जीवन।
+
+हरेक बिहान तिम्रै मुस्कानले सुरु होस्,
+हरेक साँझ तिम्रै साथमा पूरा होस्।
+सुखमा मात्र होइन, दुःखमा पनि साथ दिनेछु,
+तिम्रो हरेक आँसु आफ्नै मायाले पुछिदिनेछु।
+
+आज एउटा प्रश्न छ, राखेको छु मनमा,
+के तिमी साथ दिन्छौ मेरो जीवनको यात्रामा?
+
+</div>
+
+<h2 class="gold">
+Will You Marry Me? ❤️
+</h2>
+
+<div id="choices">
+
+<button class="btn" onclick="sayYes()">
+YES! ❤️
+</button>
+
+<button class="btn" id="no"
+onmouseenter="runAway()"
+ontouchstart="runAway()"
+onclick="runAway()">
+NO 🙈
+</button>
+
+</div>
+
+<p class="small">
+With love, Kheppa❤️
+</p>
+
+</div>
+</section>
+
+<!-- WEDDING SCREEN -->
+<section class="screen" id="wedding">
+
+<div class="card">
+
+<div class="kicker">
+And so, our forever begins
+</div>
+
+<h1>
+Palsang <span class="gold">♥</span> Januka
+</h1>
+
+<img
+class="photo"
+src="SURPRISE/f54a37cb-6255-4441-8bbc-1deda0dd04eb.jpg"
+alt="Palsang and Januka together"
+>
+
+<h2 class="gold">
+Happily Ever After 💍
+</h2>
+
+<p>
+दुई मुटु, एउटै सपना,
+सँगै हिँड्ने जीवनभरको यात्रा। ❤️
+</p>
+
+<div style="font-size:2.5rem;">
+🌹 💍 🥂 🌹
+</div>
+
+<p class="gold">
+Forever Starts Today...
+</p>
+
+<button class="btn" onclick="location.reload()">
+PLAY AGAIN ♥
+</button>
+
+</div>
+</section>
+
+<script>
+
+// ==========================
+// SCREEN CONTROL
+// ==========================
+
+const screens = [
+    'intro',
+    'game',
+    'proposal',
+    'wedding'
+];
+
+function show(id) {
+    screens.forEach(screen => {
+        document.getElementById(screen)
+        .classList.toggle('active', screen === id);
+    });
+}
+
+// ==========================
+// ROMANTIC BACKGROUND MUSIC
+// ==========================
+
+const romanticMusic = document.getElementById('romanticMusic');
+let musicPlaying = false;
+
+function startMusic() {
+    romanticMusic.volume = 0.55;
+
+    romanticMusic.play().then(() => {
+        musicPlaying = true;
+        document.getElementById('musicButton').textContent = '🎵 Music ON';
+    }).catch(() => {
+        alert('romantic_music.mp3 फाइल HTML भएको folder मा राखेको छ कि छैन जाँच गर।');
+    });
+}
+
+function stopMusic() {
+    romanticMusic.pause();
+    musicPlaying = false;
+    document.getElementById('musicButton').textContent = '🎵 Music OFF';
+}
+
+function toggleMusic() {
+    if (musicPlaying) {
+        stopMusic();
+    } else {
+        startMusic();
+    }
+}
+
+// ==========================
+// FLOATING HEART ANIMATION
+// ==========================
+
+function hearts() {
+
+    for (let i = 0; i < 18; i++) {
+
+        let heart = document.createElement('div');
+
+        heart.className = 'float';
+
+        heart.textContent =
+            ['❤️', '💕', '✨', '🌹'][i % 4];
+
+        heart.style.left = Math.random() * 100 + 'vw';
+
+        heart.style.bottom = '-30px';
+
+        heart.style.fontSize =
+            (18 + Math.random() * 25) + 'px';
+
+        heart.style.animationDuration =
+            (3 + Math.random() * 3) + 's';
+
+        document.body.appendChild(heart);
+
+        setTimeout(() => heart.remove(), 6200);
+
+    }
+}
+
+// ==========================
+// FLYING DOVE GAME
+// ==========================
+
+let canvas;
+let ctx;
+let bird;
+let obstacles;
+let collectibles;
+let score = 0;
+let frame = 0;
+let running = false;
+let raf;
+
+function startGame() {
+
+    show('game');
+    startMusic();
+
+    canvas = document.getElementById('board');
+    ctx = canvas.getContext('2d');
+
+    bird = {
+        x: 105,
+        y: 300,
+        vy: 0
+    };
+
+    obstacles = [];
+    collectibles = [];
+    score = 0;
+    frame = 0;
+    running = true;
+
+    document.getElementById('score').textContent = '0';
+
+    cancelAnimationFrame(raf);
+
+    loop();
+}
+
+function flap() {
+    if (!running) return;
+    bird.vy = -6.4;
+}
+
+document.addEventListener('keydown', function(e) {
+
+    if (e.code === 'Space') {
+
+        if (document.getElementById('game').classList.contains('active')) {
+            e.preventDefault();
+            flap();
+        }
+
+    }
+
+});
+
+canvasEvent();
+
+function canvasEvent() {
+    document.getElementById('board')
+    .addEventListener('pointerdown', flap);
+}
+
+function addObstacle() {
+
+    let gap = 190;
+    let top = 80 + Math.random() * 260;
+
+    obstacles.push({
+        x: 500,
+        top: top,
+        bottom: top + gap
+    });
+
+    collectibles.push({
+        x: 525,
+        y: top + gap / 2,
+        got: false
+    });
+
+}
+
+// ==========================
+// DOVE DESIGN
+// ==========================
+
+function drawDove(x, y) {
+
+    ctx.save();
+
+    ctx.translate(x, y);
+
+    ctx.fillStyle = '#fff';
+    ctx.shadowColor = '#fff';
+    ctx.shadowBlur = 12;
+
+    ctx.beginPath();
+    ctx.ellipse(0, 0, 23, 15, -0.15, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.ellipse(-4, -12, 19, 8, -0.7, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.arc(17, -7, 9, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = '#ffbd69';
+
+    ctx.beginPath();
+    ctx.moveTo(25, -7);
+    ctx.lineTo(36, -3);
+    ctx.lineTo(25, -1);
+    ctx.fill();
+
+    ctx.fillStyle = '#171017';
+
+    ctx.beginPath();
+    ctx.arc(19, -9, 1.6, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.restore();
+}
+
+// ==========================
+// GAME LOOP
+// ==========================
+
+function loop() {
+
+    if (!running) return;
+
+    frame++;
+
+    ctx.clearRect(0, 0, 480, 640);
+
+    // Stars
+    ctx.fillStyle = '#ffffff22';
+
+    for (let i = 0; i < 35; i++) {
+
+        let x = (i * 71 - frame * 0.25) % 480;
+        let y = (i * 113) % 640;
+
+        ctx.fillRect((x + 480) % 480, y, 2, 2);
+
+    }
+
+    ctx.fillStyle = '#ffb4c7';
+    ctx.font = '26px Georgia';
+
+    ctx.fillText('♥', 25, 45);
+    ctx.fillText('♥', 420, 90);
+
+    // Create obstacles
+    if (frame % 105 === 1) {
+        addObstacle();
+    }
+
+    bird.vy += 0.32;
+    bird.y += bird.vy;
+
+    // Obstacles
+    obstacles.forEach(o => {
+
+        o.x -= 2.7;
+
+        ctx.fillStyle = '#6e1934';
+        ctx.strokeStyle = '#ff9caf';
+        ctx.lineWidth = 3;
+
+        ctx.fillRect(o.x, 0, 58, o.top);
+        ctx.strokeRect(o.x, 0, 58, o.top);
+
+        ctx.fillRect(o.x, o.bottom, 58, 640 - o.bottom);
+        ctx.strokeRect(o.x, o.bottom, 58, 640 - o.bottom);
+
+        // Collision
+        if (
+            bird.x + 15 > o.x &&
+            bird.x - 15 < o.x + 58 &&
+            (
+                bird.y - 12 < o.top ||
+                bird.y + 12 > o.bottom
+            )
+        ) {
+            endGame(false);
+        }
+
+    });
+
+    // Collect hearts
+    collectibles.forEach(c => {
+
+        c.x -= 2.7;
+
+        if (!c.got) {
+
+            ctx.font = '30px Arial';
+            ctx.shadowColor = '#ff3158';
+            ctx.shadowBlur = 18;
+            ctx.fillStyle = '#ff6684';
+
+            ctx.fillText('♥', c.x, c.y);
+
+            ctx.shadowBlur = 0;
+
+            if (Math.hypot(c.x - bird.x, c.y - bird.y) < 32) {
+
+                c.got = true;
+                score++;
+
+                document.getElementById('score').textContent = score;
+
+                if (score >= 10) {
+                    endGame(true);
+                }
+
+            }
+
+        }
+
+    });
+
+    drawDove(bird.x, bird.y);
+
+    // Screen boundary
+    if (bird.y > 625 || bird.y < 10) {
+        endGame(false);
+    }
+
+    obstacles = obstacles.filter(o => o.x > -70);
+    collectibles = collectibles.filter(c => c.x > -40);
+
+    if (running) {
+        raf = requestAnimationFrame(loop);
+    }
+
+}
+
+// ==========================
+// GAME RESULT
+// ==========================
+
+function endGame(won) {
+
+    if (!running) return;
+
+    running = false;
+
+    cancelAnimationFrame(raf);
+
+    if (won) {
+
+        setTimeout(() => {
+            show('proposal');
+            hearts();
+        }, 500);
+
+    } else {
+
+        setTimeout(() => {
+            alert('हार मान्नु हुँदैन Maya! फेरि प्रयास गर, मेरी Dalli! ❤️');
+            show('intro');
+        }, 300);
+
+    }
+
+}
+
+// ==========================
+// NO BUTTON ESCAPE
+// ==========================
+
+function runAway() {
+
+    let no = document.getElementById('no');
+    let box = document.getElementById('choices');
+
+    let maxX = Math.max(0, box.clientWidth - no.offsetWidth);
+
+    no.style.left = Math.random() * maxX + 'px';
+    no.style.top = Math.random() * 25 + 'px';
+
+}
+
+// ==========================
+// YES - WEDDING SURPRISE
+// ==========================
+
+let celebrationTimer;
+
+function sayYes() {
+
+    show('wedding');
+
+    hearts();
+
+    clearInterval(celebrationTimer);
+
+    celebrationTimer = setInterval(hearts, 2600);
+
+}
+
+</script>
+
+</body>
+</html>
